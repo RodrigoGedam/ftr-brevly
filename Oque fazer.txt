@@ -1,5 +1,0 @@
-id
-original
-short
-access count
-created at
