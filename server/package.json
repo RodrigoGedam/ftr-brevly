@@ -8,9 +8,9 @@
 		"dev": "tsx watch --env-file .env src/infra/http/server.ts",
 		"test": "dotenv -e .env.test -- vitest run",
 		"test:watch": "dotenv -e .env.test -- vitest",
-		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio",
+		"db:generate": "drizzle-kit generate --config=drizzle.config.ts",
+		"db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+		"db:studio": "drizzle-kit studio --config=drizzle.config.ts",
 		"db:migrate:test": "dotenv -e .env.test -- drizzle-kit migrate"
 	},
 	"keywords": [],
@@ -43,3 +43,4 @@
 		"zod": "^4.3.6"
 	}
 }
+

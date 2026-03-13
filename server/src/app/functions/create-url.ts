@@ -3,8 +3,8 @@ import z from "zod";
 import { db } from "@/infra/db";
 import { schema } from "@/infra/db/schemas";
 import { type Either, makeLeft, makeRight } from "@/shared/either";
-import { InvalidShortenedUrl } from "../errors/invalid-shortened-url";
-import { ShortenedUrlAlreadyExists } from "../errors/shotened-url-already-exists";
+import { InvalidShortenedUrl } from "./errors/invalid-shortened-url";
+import { ShortenedUrlAlreadyExists } from "./errors/shotened-url-already-exists";
 
 const createUrlInput = z.object({
 	originalUrl: z
@@ -20,8 +20,8 @@ const createUrlInput = z.object({
 		),
 });
 
-export type CreateUrlInput = z.input<typeof createUrlInput>;
-export type CreateUrlOutput = Either<
+type CreateUrlInput = z.input<typeof createUrlInput>;
+type CreateUrlOutput = Either<
 	ShortenedUrlAlreadyExists | InvalidShortenedUrl,
 	{
 		id: string;
@@ -43,15 +43,15 @@ export async function createUrl(
 
 	const existingUrl = await db
 		.select()
-		.from(schema.links)
-		.where(eq(schema.links.shortUrl, parsed.data.shortUrl));
+		.from(schema.urls)
+		.where(eq(schema.urls.shortUrl, parsed.data.shortUrl));
 
 	if (existingUrl.length > 0) {
 		return makeLeft(new ShortenedUrlAlreadyExists(parsed.data.shortUrl));
 	}
 
-	const [link] = await db
-		.insert(schema.links)
+	const [url] = await db
+		.insert(schema.urls)
 		.values({
 			originalUrl: parsed.data.originalUrl,
 			shortUrl: parsed.data.shortUrl,
@@ -59,10 +59,10 @@ export async function createUrl(
 		.returning();
 
 	return makeRight({
-		id: link.id,
-		originalUrl: link.originalUrl,
-		shortUrl: link.shortUrl,
-		accessCount: link.accessCount,
-		createdAt: link.createdAt,
+		id: url.id,
+		originalUrl: url.originalUrl,
+		shortUrl: url.shortUrl,
+		accessCount: url.accessCount,
+		createdAt: url.createdAt,
 	});
 }

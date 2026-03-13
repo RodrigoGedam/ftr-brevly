@@ -5,11 +5,11 @@ import { isRight, unwrapEither } from "@/shared/either";
 
 export const createUrlRoute: FastifyPluginAsyncZod = async server => {
 	server.post(
-		"/links",
+		"/urls",
 		{
 			schema: {
 				summary: "Create a shortened url",
-				tags: ["links"],
+				tags: ["urls"],
 				body: z.object({
 					originalUrl: z
 						.string()
@@ -38,7 +38,7 @@ export const createUrlRoute: FastifyPluginAsyncZod = async server => {
 							accessCount: z.number(),
 							createdAt: z.string().check(z.iso.datetime()),
 						})
-						.describe("Link criado com sucesso"),
+						.describe("Url criada com sucesso"),
 					409: z.object({
 						message: z
 							.string()
@@ -56,14 +56,14 @@ export const createUrlRoute: FastifyPluginAsyncZod = async server => {
 			});
 
 			if (isRight(result)) {
-				const link = unwrapEither(result);
+				const url = unwrapEither(result);
 
 				return reply.status(201).send({
-					urlId: link.id,
-					originalUrl: link.originalUrl,
-					shortUrl: link.shortUrl,
-					accessCount: link.accessCount,
-					createdAt: link.createdAt.toISOString(),
+					urlId: url.id,
+					originalUrl: url.originalUrl,
+					shortUrl: url.shortUrl,
+					accessCount: url.accessCount,
+					createdAt: url.createdAt.toISOString(),
 				});
 			}
 
@@ -80,7 +80,7 @@ export const createUrlRoute: FastifyPluginAsyncZod = async server => {
 					});
 				default:
 					return reply.status(409).send({
-						message: "Erro ao criar o link.",
+						message: "Erro ao criar a url.",
 					});
 			}
 		}
