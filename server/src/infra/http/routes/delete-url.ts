@@ -3,7 +3,7 @@ import { z } from "zod";
 import { deleteUrl } from "@/app/functions/delete-url";
 import { isRight, unwrapEither } from "@/shared/either";
 
-export const deleteLinkRoute: FastifyPluginAsyncZod = async server => {
+export const deleteUrlRoute: FastifyPluginAsyncZod = async server => {
 	server.delete(
 		"/urls/:shortUrl",
 		{
