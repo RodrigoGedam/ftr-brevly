@@ -11,9 +11,9 @@ export const deleteUrlRoute: FastifyPluginAsyncZod = async server => {
 				summary: "Deletar o url encurtado",
 				tags: ["urls"],
 				params: z.object({
-					shortUrl: z
+					shortenedUrl: z
 						.string()
-						.min(1, "O shortUrl não pode estar vazio"),
+						.min(1, "O shortenedUrl não pode estar vazio"),
 				}),
 				response: {
 					200: z
@@ -30,9 +30,9 @@ export const deleteUrlRoute: FastifyPluginAsyncZod = async server => {
 			},
 		},
 		async (request, reply) => {
-			const { shortUrl } = request.params;
+			const { shortenedUrl } = request.params;
 
-			const result = await deleteUrl(shortUrl);
+			const result = await deleteUrl(shortenedUrl);
 
 			if (isRight(result)) {
 				return reply.status(200).send({

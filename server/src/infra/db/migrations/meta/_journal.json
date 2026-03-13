@@ -8,6 +8,13 @@
       "when": 1773429484075,
       "tag": "0000_last_hairball",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773440494685,
+      "tag": "0001_oval_bishop",
+      "breakpoints": true
     }
   ]
 }

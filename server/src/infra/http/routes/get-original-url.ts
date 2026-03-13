@@ -11,7 +11,7 @@ export const getOriginalUrlRoute: FastifyPluginAsyncZod = async server => {
 				summary: "Obter url original a partir da url encurtada",
 				tags: ["urls"],
 				params: z.object({
-					shortUrl: z
+					shortenedUrl: z
 						.string()
 						.min(
 							3,
@@ -38,9 +38,9 @@ export const getOriginalUrlRoute: FastifyPluginAsyncZod = async server => {
 			},
 		},
 		async (request, reply) => {
-			const { shortUrl } = request.params;
+			const { shortenedUrl } = request.params;
 
-			const result = await getOriginalUrl(shortUrl);
+			const result = await getOriginalUrl(shortenedUrl);
 
 			if (isLeft(result)) {
 				const error = unwrapEither(result);
