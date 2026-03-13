@@ -5,7 +5,7 @@ import { isLeft, unwrapEither } from "@/shared/either";
 
 export const getOriginalUrlRoute: FastifyPluginAsyncZod = async server => {
 	server.get(
-		"/:shortenedUrl",
+		"/urls/:shortenedUrl",
 		{
 			schema: {
 				summary: "Obter url original a partir da url encurtada",

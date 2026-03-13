@@ -5,7 +5,7 @@ import { isRight, unwrapEither } from "@/shared/either";
 
 export const deleteUrlRoute: FastifyPluginAsyncZod = async server => {
 	server.delete(
-		"/urls/:shortUrl",
+		"/urls/:shortenedUrl",
 		{
 			schema: {
 				summary: "Deletar o url encurtado",
