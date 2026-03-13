@@ -50,7 +50,6 @@ export async function createUrl(
 		return makeLeft(new ShortenedUrlAlreadyExists(parsed.data.shortUrl));
 	}
 
-	// Criar o link no banco
 	const [link] = await db
 		.insert(schema.links)
 		.values({
