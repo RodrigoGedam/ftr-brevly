@@ -78,10 +78,6 @@ export const createUrlRoute: FastifyPluginAsyncZod = async server => {
 					return reply.status(409).send({
 						message: error.message,
 					});
-				default:
-					return reply.status(409).send({
-						message: "Erro ao criar a url.",
-					});
 			}
 		}
 	);
