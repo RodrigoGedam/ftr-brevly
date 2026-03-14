@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CreateUrlsForm } from "@/components/CreateUrlsForm";
 import { ListUrls } from "@/components/ListUrls";
+import { getAll } from "@/http/get-all";
 import type { ShortenedUrl } from "@/types";
 
 export const Home = () => {
@@ -11,9 +12,8 @@ export const Home = () => {
 		async function loadUrls() {
 			try {
 				setIsLoading(true);
-				/* const response = await getAll();
-
-				setUrls(response.urls); */
+				const response = await getAll();
+				setUrls(response.urls);
 			} catch (error) {
 				console.error("Erro ao buscar urls:", error);
 			} finally {
@@ -22,6 +22,21 @@ export const Home = () => {
 		}
 
 		loadUrls();
+
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === "visible") {
+				loadUrls();
+			}
+		};
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener(
+				"visibilitychange",
+				handleVisibilityChange
+			);
+		};
 	}, []);
 
 	const handleUrlCreated = (newUrl: ShortenedUrl) => {

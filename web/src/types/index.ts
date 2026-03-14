@@ -2,7 +2,7 @@ export type ShortenedUrl = {
 	id: string;
 	originalUrl: string;
 	shortenedUrl: string;
-	countViews: number;
+	accessCount: number;
 	createdAt: Date;
 };
 
