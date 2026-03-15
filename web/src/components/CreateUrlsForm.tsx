@@ -37,7 +37,8 @@ export const CreateUrlsForm = ({ onUrlCreated }: CreateUrlsFormProps) => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, dirtyFields },
+		reset,
+		formState: { errors, dirtyFields, isSubmitting },
 	} = useForm<CreateShortenedUrlData>({
 		resolver: zodResolver(CreateShortenedUrlSchema),
 		defaultValues: {
@@ -68,6 +69,8 @@ export const CreateUrlsForm = ({ onUrlCreated }: CreateUrlsFormProps) => {
 					accessCount,
 					createdAt,
 				});
+
+				reset();
 			}
 		} catch (_error) {
 			toast.error("Erro no cadastro", {
@@ -131,12 +134,14 @@ export const CreateUrlsForm = ({ onUrlCreated }: CreateUrlsFormProps) => {
 					)}
 				</label>
 				<input
-					className="bg-blue-base not-disabled:cursor-pointer disabled:bg-blue-base/50 hover:bg-blue-dark h-12 rounded-lg text-md text-white"
+					className="bg-blue-base not-disabled:cursor-pointer disabled:bg-blue-base/50 hover:bg-blue-dark h-12 rounded-lg text-md text-white disabled:cursor-not-allowed"
 					disabled={
-						!(dirtyFields.originalUrl && dirtyFields.shortenedUrl)
+						!(
+							dirtyFields.originalUrl && dirtyFields.shortenedUrl
+						) || isSubmitting
 					}
 					type="submit"
-					value="Salvar link"
+					value={isSubmitting ? "Salvando..." : "Salvar link"}
 				/>
 			</form>
 		</div>
