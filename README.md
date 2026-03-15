@@ -1,30 +1,102 @@
-Front-end
-Deve ser possível criar um link
-Não deve ser possível criar um link com encurtamento mal formatado
-Não deve ser possível criar um link com encurtamento já existente
-Deve ser possível deletar um link
-Deve ser possível obter a URL original por meio do encurtamento
-Deve ser possível listar todas as URL’s cadastradas
-Deve ser possível incrementar a quantidade de acessos de um link
-Deve ser possível baixar um CSV com o relatório dos links criados
-Além disso, também temos algumas regras importantes específicas para o front-end:
+# Brevly
 
-É obrigatória a criação de uma aplicação React no formato SPA utilizando o Vite como bundler;
-Siga o mais fielmente possível o layout do Figma;
-Trabalhe com elementos que tragam uma boa experiência ao usuário (empty state, ícones de carregamento, bloqueio de ações a depender do estado da aplicação);
-Foco na responsividade: essa aplicação deve ter um bom uso tanto em desktops quanto em celulares.
+**Brevly** é uma aplicação de encurtador de URL com frontend em React (Vite) e backend em Fastify + Postgres.
 
+## 🚀 O que o projeto faz
 
-Back-end
-Deve ser possível criar um link
-Não deve ser possível criar um link com URL encurtada mal formatada
-Não deve ser possível criar um link com URL encurtada já existente
-Deve ser possível deletar um link
-Deve ser possível obter a URL original por meio de uma URL encurtada
-Deve ser possível listar todas as URL’s cadastradas
-Deve ser possível incrementar a quantidade de acessos de um link
-Deve ser possível exportar os links criados em um CSV
-Deve ser possível acessar o CSV por meio de uma CDN (Amazon S3, Cloudflare R2, etc)
-Deve ser gerado um nome aleatório e único para o arquivo
-Deve ser possível realizar a listagem de forma performática
-O CSV deve ter campos como, URL original, URL encurtada, contagem de acessos e data de criação.
+- Cria links encurtados a partir de URLs originais
+- Redireciona a partir da URL encurtada para a original
+- Lista todas as URLs cadastradas
+- Deleta URLs
+- Conta e atualiza acessos de cada link
+- Exporta um relatório CSV com as URLs e contagem de acessos
+- Gera e hospeda o CSV em uma storage (Cloudflare R2 no código atual)
+
+---
+
+## 📁 Estrutura principal
+
+- `server/` — API (Fastify + Postgres + Drizzle ORM)
+- `web/` — Frontend (React + Vite)
+
+---
+
+## ▶️ Como rodar (local)
+
+### 1) Dependências
+
+- Node.js 20+ (recomendado)
+- pnpm (usado no projeto)
+- Docker (para o Postgres local)
+
+### 2) Iniciar banco de dados
+
+```bash
+cd server
+docker compose up -d
+```
+
+### 3) Configurar variáveis de ambiente (backend)
+
+Copie o arquivo `.env.example` para `.env` e preencha:
+
+- `DATABASE_URL` (Postgres, ex: `postgres://docker:docker@localhost:5432/shortener`)
+- `CLOUDFLARE_*` (para exportar o CSV via Cloudflare R2)
+
+### 4) Rodar o servidor
+
+```bash
+cd server
+pnpm install
+pnpm dev
+```
+
+O servidor estará em `http://localhost:3333`.
+
+### 5) Rodar o frontend
+
+```bash
+cd web
+pnpm install
+pnpm dev
+```
+
+O frontend costuma rodar em `http://localhost:5173`.
+
+---
+
+## 🧩 Endpoints principais (API)
+
+| Método | Rota              | Descrição                                    |
+| ------ | ----------------- | -------------------------------------------- |
+| POST   | `/urls`           | Cria uma URL encurtada                       |
+| GET    | `/urls`           | Lista todas as URLs                          |
+| GET    | `/urls/:shortUrl` | Retorna a URL original e incrementa contador |
+| DELETE | `/urls/:urlId`    | Deleta uma URL                               |
+| POST   | `/urls/export`    | Gera e retorna URL do CSV                    |
+
+> O projeto também expõe documentação Swagger (via Fastify) em runtime.
+
+---
+
+## 🧪 Testes
+
+No backend há testes com Vitest:
+
+```bash
+cd server
+pnpm test
+```
+
+---
+
+## ⚙️ Observações
+
+- O CSV exportado é enviado para o Cloudflare R2 (configurado via variáveis de ambiente).
+- O banco é gerenciado via Drizzle ORM e migrations (pasta `server/src/infra/db/migrations`).
+
+---
+
+## 📌 Licença
+
+Projeto para fins educacionais.
